@@ -14,36 +14,38 @@ namespace xdxd
         {
             Console.WriteLine("Welcome! The test system is still in development");
             Task.Delay(3000);
-            JsonDeserializer();
+            
+           // JsonDeserializer();
             Login();
             Console.ReadKey();
         }
 
         static void Login()
-        {        
+        {
+            
             Console.WriteLine("1) Log in your account\n2) Don't have an account? Sign up now.\n3) About test system");
             int choice = int.Parse(Console.ReadLine());
             switch (choice)
             {
-                case 1:
+                case 1: //re-do log in with methods (optimization) -- in process
                     Console.WriteLine("Insert your login:");
                     string login = Console.ReadLine();
 
-                    string jsonPath = @"./Users.json";
-                    string usersJson = File.ReadAllText(jsonPath);
-                    List<Users> currentUsers = JsonConvert.DeserializeObject<List<Users>>(usersJson);
+                    //string jsonPath = @"./Users.json";
+                    //string usersJson = File.ReadAllText(jsonPath);
+                    List<Users> currentUser = GetUserFromFile();
 
-                    bool isUserExist = currentUsers.Exists(user => user.UserName == login);
+                    //bool isUserExist = currentUsers.Exists(user => user.UserName == login);
 
-                    if (isUserExist)
+                    if (IsUserExist(login)) //to much shit is going on here, re-do later
                     {
                         Console.WriteLine("Insert your password:");
                         string password = Console.ReadLine();
 
-                        Users userData = currentUsers.Find(user => user.UserName == login);
-                        if (userData.Password == password)
-                        {
-                            Console.WriteLine($"Welcome {userData.UserName}!");
+                        Users userData = GetUserByUsername(password);
+                        if (userData.Password == password) 
+                        { 
+                            Authorization();
                         }
                         else
                         {
@@ -58,9 +60,9 @@ namespace xdxd
                         Task.Delay(3000);
                         Login();
                     }
-                        break;
+                    break;
                 case 2:
-
+                    SignUp();
                     break;
                 default:
                     Console.WriteLine("Please, select between following numbers.");
@@ -70,25 +72,34 @@ namespace xdxd
             
         }
 
+        static void Authorization()
+        {
+            Console.WriteLine("");
+        }
+
         static void SignUp()
         {
-            Console.WriteLine("Let's create your account!");
-            Console.WriteLine("Enter you're login:");
+            Console.WriteLine("Let's create your account!\nEnter you're login:");
             string login = Console.ReadLine();
 
+            string password = Console.ReadLine();
 
-            string jsonPath = @"./Users.json";
+
+            ////
+            string jsonPath = @"./Users.json"; //same shit, re-do later
             string usersJson = File.ReadAllText(jsonPath);
             List<Users> currentUsers = JsonConvert.DeserializeObject<List<Users>>(usersJson);
+            ///// - old 
 
-
+            //// - new
+            List<Users> users = GetUserFromFile();
         }
        
-        static void JsonDeserializer()
+        static void JsonDeserializer() //will delete in the future -- almost done with replacing the whole method, just ignore it
         {
             try
             {
-                string jsonPath = @"./Users.json";
+                string jsonPath = @"./Users.json"; //same shit, re-do later
                 string usersJson = File.ReadAllText(jsonPath);
                 List<Users> currentUsers = JsonConvert.DeserializeObject<List<Users>>(usersJson);
 
@@ -103,6 +114,25 @@ namespace xdxd
                 string exception = ex.ToString();
                 Console.WriteLine(exception);
             }
+        }
+
+        static List<Users> GetUserFromFile()
+        {
+            string jsonPath = @"./Users.json"; 
+            string usersJson = File.ReadAllText(jsonPath);
+            return JsonConvert.DeserializeObject<List<Users>>(usersJson);
+        }
+
+        static bool IsUserExist(string username)
+        {
+            List<Users> users = GetUserFromFile();
+            return users.Exists(user => user.UserName == username);
+        }
+
+        static Users GetUserByUsername(string username)
+        {
+            List<Users> users = GetUserFromFile();
+            return users.Find(user => user.UserName == username);
         }
     }
 }
