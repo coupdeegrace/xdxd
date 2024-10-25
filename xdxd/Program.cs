@@ -8,8 +8,9 @@ using Newtonsoft.Json;
 namespace xdxd
 {
     internal class Program
-    {    
-            
+    {
+        static string currentUser; 
+        
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome! The test system is still in development");
@@ -24,7 +25,7 @@ namespace xdxd
         {
             
             Console.WriteLine("1) Log in your account\n2) Don't have an account? Sign up now.\n3) About test system");
-            int choice = int.Parse(Console.ReadLine());
+            int choice = int.Parse(Console.ReadLine()); //exception if user enters non-int variable, fix this u dumbass
             switch (choice)
             {
                 case 1: //re-do log in with methods (optimization) -- in process
@@ -33,7 +34,7 @@ namespace xdxd
 
                     //string jsonPath = @"./Users.json";
                     //string usersJson = File.ReadAllText(jsonPath);
-                    List<Users> currentUser = GetUserFromFile();
+                    List<Users> User = GetUserFromFile();
 
                     //bool isUserExist = currentUsers.Exists(user => user.UserName == login);
 
@@ -42,9 +43,10 @@ namespace xdxd
                         Console.WriteLine("Insert your password:");
                         string password = Console.ReadLine();
 
-                        Users userData = GetUserByUsername(password);
+                        Users userData = GetUserByUsername(login); //null reference, debug this u dumbass (done)
                         if (userData.Password == password) 
-                        { 
+                        {
+                            currentUser = userData.UserName;
                             Authorization();
                         }
                         else
@@ -74,12 +76,14 @@ namespace xdxd
 
         static void Authorization()
         {
-            Console.WriteLine("");
+            Console.Clear();
+            Console.WriteLine($"Hello {currentUser}!");
         }
 
         static void SignUp()
         {
-            Console.WriteLine("Let's create your account!\nEnter you're login:");
+            Console.Clear();
+            Console.WriteLine("Let's create your account!\nEnter your login:");
             string login = Console.ReadLine();
 
             string password = Console.ReadLine();
