@@ -25,7 +25,7 @@ namespace xdxd
         static void Login()
         {
             
-            Console.WriteLine("1) Log in your account\n2) Don't have an account? Sign up now.\n3) About test system");    
+            Console.WriteLine("1) Log in your account\n2) Don't have an account? Sign up now.\n3) About test system\n4) Exit");    
             try
             {
                 int choice = int.Parse(Console.ReadLine()); //exception if user enters non-int variable, fix this u dumbass | done, very poorly, unlucky
@@ -69,6 +69,11 @@ namespace xdxd
                     case 2:
                         SignUp();
                         break;
+                    case 3:
+                        break;
+                    case 4:
+                        Environment.Exit(0);
+                        break;
                     default:
                         Console.WriteLine("Please, select between following numbers.");
                         Login();
@@ -87,6 +92,37 @@ namespace xdxd
         {
             Console.Clear();
             Console.WriteLine($"Hello {currentUser}!");
+            Console.WriteLine("1) Start chat\n2) Chats\n3) Settings\n4)Log out");
+            try
+            {
+                int choise = int.Parse(Console.ReadLine());
+                switch (choise)
+                {
+                    case 1:
+                        StartChat();
+                        break;
+
+                    case 2:
+                        break;
+                    case 3:
+
+                        break;
+                    case 4:
+                        Console.Clear();
+                        Login();
+                        break;
+                    default:
+                        Console.WriteLine("Please, select between following numbers.");
+                        Authorization();
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Please, select between following numbers.");
+                Authorization();
+                throw;
+            }
         }
 
         static void SignUp()
@@ -149,6 +185,30 @@ namespace xdxd
                 string exception = ex.ToString();
                 Console.WriteLine(exception);
             }
+        }
+
+        static void StartChat()
+        {
+            Console.WriteLine("Enter the username that you want to start chatting with");
+            string newChatUsername = Console.ReadLine();
+            if (!IsUserExist(newChatUsername))
+                Console.WriteLine("The username is not found");
+            else
+                NewChat(newChatUsername);
+        }
+
+        static void NewChat(string newChatUsername)
+        {
+            
+
+
+        }
+
+        public void AddFriend(string newChatUsername)
+        {
+            string path = @"./Users.json";
+            string newFrined = JsonConvert.SerializeObject(newChatUsername, Formatting.Indented);
+
         }
 
         static void AddUsersToFile(List<Users> users)
